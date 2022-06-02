@@ -26,8 +26,7 @@ class _SplashState extends State<Splash> {
         child: CenteredMessage(
           'Posterr - Social Network',
           icon: Icons.people_outline_rounded,
-        );
-        )
-    );
+        ),
+);
   }
 }
