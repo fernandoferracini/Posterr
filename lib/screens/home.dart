@@ -36,13 +36,17 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
+              print('none');
               break;
             case ConnectionState.waiting:
+              print('waiting');
               return CircularProgress();
               break;
             case ConnectionState.active:
+              print('active');
               break;
             case ConnectionState.done:
+              print('done');
               if (snapshot.hasData) {
                 final List<Map<String, dynamic>>? posts = snapshot.data;
                 // PosterrGeneral.printLongText(posts.toString());

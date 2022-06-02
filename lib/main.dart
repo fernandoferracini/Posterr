@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:posterr/screens/home.dart';
+import 'package:posterr/screens/splash_screen.dart';
 
 import 'dao/posterr_posts_class.dart';
 import 'dao/posterr_users_class.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.purple,
       ),
-      home: const MyHomePage(title: 'Posterr'),
+      home: Splash(),
     );
   }
 }
