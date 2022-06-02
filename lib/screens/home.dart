@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:posterr/dao/posterr_posts_class.dart';
 import 'package:posterr/components/circular_progress.dart';
 import 'package:posterr/components/centered_message.dart';
+import 'package:posterr/components/posterr_general.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -44,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
             case ConnectionState.done:
               if (snapshot.hasData) {
                 final List<Map<String, dynamic>>? posts = snapshot.data;
+                // PosterrGeneral.printLongText(posts.toString());
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     final Map<String, dynamic> post = posts![index];
@@ -82,15 +84,174 @@ class _postItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        title: Text(
-          post['username'].toString(),
-          style: TextStyle(fontSize: 24.0),
+    if(post['repostCode'] != null){
+      return Card(
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          children: [
+            ListTile(
+              leading: Icon(Icons.person_rounded),
+              title: Text(post['name']),
+              subtitle: Text(
+                'Reposted  ' + (post['repostDaysFrom'] > 1 ? (post['repostDaysFrom'].toString() + ' days ago') : post['repostHoursFrom'] < 24 ? (post['repostHoursFrom'].toString() + ' hours ago') : (post['repostMinutesFrom'].toString() + ' minutes ago')).toString(),
+                style: TextStyle(color: Colors.black.withOpacity(0.6)),
+              )
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: Colors.purple, width: 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.person_rounded),
+                      title: Text(post['name']+' . '+(post['postedDaysFrom'] > 1 ? (post['postedDaysFrom'].toString() + ' days ago') : post['postedHoursFrom'] < 24 ? (post['postedHoursFrom'].toString() + ' hours ago') : (post['postedMinutesFrom'].toString() + ' minutes ago')).toString()),
+                      subtitle: Text(
+                        post['username'],
+                        style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        post['repostPost'] != null?post['repostPost']: "",
+                        style: TextStyle(color: Colors.purple, fontSize: 28.0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            ButtonBar(
+              alignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.autorenew_rounded,
+                  ),
+                  iconSize: 25,
+                  color: Colors.purple,
+                  onPressed: () {
+
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.create_rounded,
+                  ),
+                  iconSize: 25,
+                  color: Colors.purple,
+                  onPressed: () {
+
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
-        subtitle: Text('Conta: ' + post['name'].toString(),
-            style: TextStyle(fontSize: 16.0)),
-      ),
-    );
+      );
+    }else{
+      if(post['quoteRepostCode'] != ""){
+        return Card(
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            children: [
+              ListTile(
+                leading: Icon(Icons.person_rounded),
+                title: Text(post['name']),
+                subtitle: Text(
+                  post['username'],
+                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  post['post'] != null?post['post']: "",
+                  style: TextStyle(color: Colors.purple, fontSize: 28.0),
+                ),
+              ),
+              ButtonBar(
+                alignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.autorenew_rounded,
+                    ),
+                    iconSize: 25,
+                    color: Colors.purple,
+                    onPressed: () {
+
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.create_rounded,
+                    ),
+                    iconSize: 25,
+                    color: Colors.purple,
+                    onPressed: () {
+
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      }else{
+        return Card(
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            children: [
+              ListTile(
+                leading: Icon(Icons.person_rounded),
+                title: Text(post['name']),
+                subtitle: Text(
+                  post['username'],
+                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  post['post'] != null?post['post']: "",
+                  style: TextStyle(color: Colors.purple, fontSize: 28.0),
+                ),
+              ),
+              ButtonBar(
+                alignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.autorenew_rounded,
+                    ),
+                    iconSize: 25,
+                    color: Colors.purple,
+                    onPressed: () {
+
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.create_rounded,
+                    ),
+                    iconSize: 25,
+                    color: Colors.purple,
+                    onPressed: () {
+
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      }
+    }
   }
 }
