@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:intl/intl.dart';
 
 class posterrPosts {
 
@@ -9,7 +10,7 @@ class posterrPosts {
       'post TEXT(777),'
       'repostCode INTEGER,'
       'quoteRepostCode INTEGER,'
-      'postedDatetime DATE'
+      'postedDatet  DATE'
     ')';
 
   static final String tablePostsInitialData = "INSERT INTO posterr_posts (codPost,username,post,repostCode,quoteRepostCode,postedDatetime) VALUES "
@@ -34,6 +35,7 @@ class posterrPosts {
   static const String _listAllPosts = "SELECT "
       "a.codPost, "
       "a.username, "
+      "c.name, "
       "a.post, "
       "a.repostCode, "
       "a.quoteRepostCode, "
@@ -41,19 +43,20 @@ class posterrPosts {
       "Cast ((JulianDay('now') - JulianDay(a.postedDatetime)) As Integer) as postedDaysFrom, "
       "Cast ((JulianDay('now') - JulianDay(a.postedDatetime)) * 24 As Integer) as postedHoursFrom, "
       "Cast ((JulianDay('now') - JulianDay(a.postedDatetime)) * 24 * 60 As Integer) as postedMinutesFrom, "
-  "case when repostCode <> '' then (select b.username from posterr_posts b where b.codPost = a.repostCode) else null end as repostUsername, "
+      "case when repostCode <> '' then (select b.username from posterr_posts b where b.codPost = a.repostCode) else null end as repostUsername, "
+      "case when repostCode <> '' then (select name from posterr_users where username = (select b.username from posterr_posts b where b.codPost = a.repostCode)) else null end as repostname, "
       "case when repostCode <> '' then (select b.post from posterr_posts b where b.codPost = a.repostCode) else null  end as repostPost,	"
       "case when repostCode <> '' then (select b.postedDatetime from posterr_posts b where b.codPost = a.repostCode) else null  end as repostpostedDatetime, "
       "Cast ((JulianDay('now') - JulianDay(case when repostCode <> '' then (select b.postedDatetime from posterr_posts b where b.codPost = a.repostCode) else null  end)) As Integer) as repostDaysFrom, "
       "Cast ((JulianDay('now') - JulianDay(case when repostCode <> '' then (select b.postedDatetime from posterr_posts b where b.codPost = a.repostCode) else null  end)) * 24 As Integer) as repostHoursFrom, "
       "Cast ((JulianDay('now') - JulianDay(case when repostCode <> '' then (select b.postedDatetime from posterr_posts b where b.codPost = a.repostCode) else null  end)) * 24 * 60 As Integer) as repostMinutesFrom, "
       "case when quoteRepostCode <> '' then (select b.username from posterr_posts b where b.codPost = a.quoteRepostCode) else null end as quoteRepostCodeUsername, "
-      "case when quoteRepostCode <> '' then (select b.post from posterr_posts b where b.codPost = a.quoteRepostCode) else null  end as quoteRepostCodePost, "
+      "case when quoteRepostCode <> '' then (select name from posterr_users where username = (select b.username from posterr_posts b where b.codPost = a.quoteRepostCode)) else null end as quoteRepostname, "
+      "case when quoteRepostCode <> '' then (select b.post from posterr_posts b where b.codPost = a.quoteRepostCode) else null  end as quoteRepostPost, "
       "case when quoteRepostCode <> '' then (select b.postedDatetime from posterr_posts b where b.codPost = a.quoteRepostCode) else null  end as quoteRepostCodepostedDatetime, "
       "Cast ((JulianDay('now') - JulianDay(case when quoteRepostCode <> '' then (select b.postedDatetime from posterr_posts b where b.codPost = a.quoteRepostCode) else null  end)) As Integer) as quoteRepostDaysFrom, "
       "Cast ((JulianDay('now') - JulianDay(case when quoteRepostCode <> '' then (select b.postedDatetime from posterr_posts b where b.codPost = a.quoteRepostCode) else null  end)) * 24 As Integer) as quoteRepostHoursFrom, "
-      "Cast ((JulianDay('now') - JulianDay(case when quoteRepostCode <> '' then (select b.postedDatetime from posterr_posts b where b.codPost = a.quoteRepostCode) else null  end)) * 24 * 60 As Integer) as quoteRepostMinutesFrom, "
-      "c.name "
+      "Cast ((JulianDay('now') - JulianDay(case when quoteRepostCode <> '' then (select b.postedDatetime from posterr_posts b where b.codPost = a.quoteRepostCode) else null  end)) * 24 * 60 As Integer) as quoteRepostMinutesFrom "
       "FROM  posterr_posts a inner join posterr_users c on a.username = c.username "
       "order by postedDatetime desc";
 
@@ -86,6 +89,19 @@ class posterrPosts {
     final Database db = await (getDatabase());
     final List<Map<String, dynamic>> result = await db.rawQuery(_listAllPosts);
     return result;
+  }
+
+  Future<int> post(String post) async {
+    final Database db = await (getDatabase());
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+    final String formatted = formatter.format(now);
+    print(formatted); // something like 2013-04-20
+    String _sql = "INSERT INTO posterr_posts "
+        "(username,post,repostCode,quoteRepostCode,postedDatetime) VALUES "
+        "('@fernandoferracini','$post',NULL,NULL,'$formatted')";
+    final List<Map<String, dynamic>> result = await db.rawQuery(_sql);
+    return 1;
   }
 
 }

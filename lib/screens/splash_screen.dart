@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:posterr/screens/home.dart';
 
-import '../components/centered_message.dart';
+import 'package:posterr/components/centered_message.dart';
 
 class Splash extends StatefulWidget {
   @override

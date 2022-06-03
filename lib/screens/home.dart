@@ -2,19 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:posterr/dao/posterr_posts_class.dart';
 import 'package:posterr/components/circular_progress.dart';
 import 'package:posterr/components/centered_message.dart';
-import 'package:posterr/components/posterr_general.dart';
+import 'package:posterr/screens/post_form.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -36,17 +27,13 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
-              print('none');
               break;
             case ConnectionState.waiting:
-              print('waiting');
               return CircularProgress();
               break;
             case ConnectionState.active:
-              print('active');
               break;
             case ConnectionState.done:
-              print('done');
               if (snapshot.hasData) {
                 final List<Map<String, dynamic>>? posts = snapshot.data;
                 // PosterrGeneral.printLongText(posts.toString());
@@ -69,13 +56,11 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          // Navigator.of(context).push(
-          //   MaterialPageRoute(
-          //     builder: (context) => ContactForm(),
-          //   ),
-          // ).then((value) => setState(() {
-          //   print('voltei');
-          // }));
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => PostForm(),
+            ),
+          ).then((value) => setState(() {}));
         },
       ),
     );
@@ -95,7 +80,7 @@ class _postItem extends StatelessWidget {
           children: [
             ListTile(
               leading: Icon(Icons.person_rounded),
-              title: Text(post['name']),
+              title: Text('R '+post['name']),
               subtitle: Text(
                 'Reposted  ' + (post['repostDaysFrom'] > 1 ? (post['repostDaysFrom'].toString() + ' days ago') : post['repostHoursFrom'] < 24 ? (post['repostHoursFrom'].toString() + ' hours ago') : (post['repostMinutesFrom'].toString() + ' minutes ago')).toString(),
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
@@ -113,9 +98,9 @@ class _postItem extends StatelessWidget {
                   children: [
                     ListTile(
                       leading: Icon(Icons.person_rounded),
-                      title: Text(post['name']+' . '+(post['postedDaysFrom'] > 1 ? (post['postedDaysFrom'].toString() + ' days ago') : post['postedHoursFrom'] < 24 ? (post['postedHoursFrom'].toString() + ' hours ago') : (post['postedMinutesFrom'].toString() + ' minutes ago')).toString()),
+                      title: Text(post['repostname']+' . '+(post['postedDaysFrom'] > 1 ? (post['postedDaysFrom'].toString() + ' days ago') : post['postedHoursFrom'] < 24 ? (post['postedHoursFrom'].toString() + ' hours ago') : (post['postedMinutesFrom'].toString() + ' minutes ago')).toString()),
                       subtitle: Text(
-                        post['username'],
+                        post['repostUsername'],
                         style: TextStyle(color: Colors.black.withOpacity(0.6)),
                       ),
                     ),
@@ -159,24 +144,53 @@ class _postItem extends StatelessWidget {
         ),
       );
     }else{
-      if(post['quoteRepostCode'] != ""){
+      if(post['quoteRepostCode'] != null){
         return Card(
           clipBehavior: Clip.antiAlias,
           child: Column(
             children: [
               ListTile(
-                leading: Icon(Icons.person_rounded),
-                title: Text(post['name']),
-                subtitle: Text(
-                  post['username'],
-                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
-                ),
+                  leading: Icon(Icons.person_rounded),
+                  title: Text('Q '+post['name']),
+                  subtitle: Text(
+                    'Reposted  ' + (post['quoteRepostDaysFrom'] > 1 ? (post['quoteRepostDaysFrom'].toString() + ' days ago') : post['quoteRepostHoursFrom'] < 24 ? (post['quoteRepostHoursFrom'].toString() + ' hours ago') : (post['quoteRepostMinutesFrom'].toString() + ' minutes ago')).toString(),
+                    style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                  )
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(
                   post['post'] != null?post['post']: "",
                   style: TextStyle(color: Colors.purple, fontSize: 28.0),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.purple, width: 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: Icon(Icons.person_rounded),
+                        title: Text(post['quoteRepostname']+' . '+(post['postedDaysFrom'] > 1 ? (post['postedDaysFrom'].toString() + ' days ago') : post['postedHoursFrom'] < 24 ? (post['postedHoursFrom'].toString() + ' hours ago') : (post['postedMinutesFrom'].toString() + ' minutes ago')).toString()),
+                        subtitle: Text(
+                          post['username'],
+                          style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          post['quoteRepostPost'] != null?post['quoteRepostPost']: "",
+                          style: TextStyle(color: Colors.purple, fontSize: 28.0),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               ButtonBar(
@@ -214,7 +228,7 @@ class _postItem extends StatelessWidget {
             children: [
               ListTile(
                 leading: Icon(Icons.person_rounded),
-                title: Text(post['name']),
+                title: Text('P '+post['name']+' . '+(post['postedDaysFrom'] > 1 ? (post['postedDaysFrom'].toString() + ' days ago') : post['postedHoursFrom'] < 24 ? (post['postedHoursFrom'].toString() + ' hours ago') : (post['postedMinutesFrom'].toString() + ' minutes ago')).toString()),
                 subtitle: Text(
                   post['username'],
                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
