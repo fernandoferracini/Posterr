@@ -3,6 +3,7 @@ import 'package:posterr/dao/posterr_posts_class.dart';
 import 'package:posterr/components/circular_progress.dart';
 import 'package:posterr/components/centered_message.dart';
 import 'package:posterr/screens/post_form.dart';
+import 'package:posterr/screens/repost_form.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -38,12 +39,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 final List<Map<String, dynamic>>? posts = snapshot.data;
                 // PosterrGeneral.printLongText(posts.toString());
                 return ListView.builder(
-                  itemBuilder: (context, index) {
-                    final Map<String, dynamic> post = posts![index];
-                    return _postItem(post);
-                  },
-                  itemCount: posts?.length,
-                );
+                      itemBuilder: (context, index) {
+                        final Map<String, dynamic> post = posts![index];
+                        return buildPost(post);
+                      },
+                      itemCount: posts?.length,
+                    );
               }
               break;
           }
@@ -58,33 +59,27 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => PostForm(),
+              builder: (context) => PostForm('post','@fernandoferracini', 1),
             ),
           ).then((value) => setState(() {}));
         },
       ),
     );
   }
-}
 
-class _postItem extends StatelessWidget {
-  final Map<String, dynamic> post;
-  const _postItem(this.post);
-
-  @override
-  Widget build(BuildContext context) {
+  Card buildPost(Map<String, dynamic> post) {
     if(post['repostCode'] != null){
       return Card(
         clipBehavior: Clip.antiAlias,
         child: Column(
           children: [
             ListTile(
-              leading: Icon(Icons.person_rounded),
-              title: Text('R '+post['name']),
-              subtitle: Text(
-                'Reposted  ' + (post['repostDaysFrom'] > 1 ? (post['repostDaysFrom'].toString() + ' days ago') : post['repostHoursFrom'] < 24 ? (post['repostHoursFrom'].toString() + ' hours ago') : (post['repostMinutesFrom'].toString() + ' minutes ago')).toString(),
-                style: TextStyle(color: Colors.black.withOpacity(0.6)),
-              )
+                leading: Icon(Icons.person_rounded),
+                title: Text('R '+post['name']),
+                subtitle: Text(
+                  'Reposted  ' + (post['repostDaysFrom'] > 1 ? (post['repostDaysFrom'].toString() + ' days ago') : post['repostHoursFrom'] < 24 ? (post['repostHoursFrom'].toString() + ' hours ago') : (post['repostMinutesFrom'].toString() + ' minutes ago')).toString(),
+                  style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                )
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
@@ -203,7 +198,10 @@ class _postItem extends StatelessWidget {
                     iconSize: 25,
                     color: Colors.purple,
                     onPressed: () {
-
+                      // _controller.open();
+                      // setState(() {
+                      //   _button = 'Open Drawer';
+                      // });
                     },
                   ),
                   IconButton(
@@ -251,7 +249,11 @@ class _postItem extends StatelessWidget {
                     iconSize: 25,
                     color: Colors.purple,
                     onPressed: () {
-
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => RepostForm('repost','@fernandoferracini', post['codPost']),
+                        ),
+                      ).then((value) => setState(() {}));
                     },
                   ),
                   IconButton(
@@ -272,4 +274,10 @@ class _postItem extends StatelessWidget {
       }
     }
   }
+
 }
+
+
+
+
+

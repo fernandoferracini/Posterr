@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:posterr/dao/posterr_posts_class.dart';
+import 'package:posterr/components/posterr_general.dart';
 
 class PostForm extends StatefulWidget {
+
+  final String postType;
+  final String username;
+  final int codPost;
+  const PostForm(this.postType,this.username, this.codPost);
 
   @override
   _PostFormState createState() => _PostFormState();
@@ -17,7 +23,12 @@ class _PostFormState extends State<PostForm> {
       appBar: AppBar(
         title: Text('Create new Post'),
       ),
-      body: SingleChildScrollView(
+      body: buildSingleChildScrollView(context),
+    );
+  }
+
+  SingleChildScrollView buildSingleChildScrollView(BuildContext context) {
+      return SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -36,9 +47,9 @@ class _PostFormState extends State<PostForm> {
                   maxLength: 777,
                   style: TextStyle(fontSize: 24.0),
                   decoration: InputDecoration(
-                        labelText: 'Type your message...',
-                        border: OutlineInputBorder(),
-                        counterText: '${(777 - _enteredText.length).toString()} character(s) left.'),
+                      labelText: 'Type your message...',
+                      border: OutlineInputBorder(),
+                      counterText: '${(777 - _enteredText.length).toString()} character(s) left.'),
                 ),
               ),
               Padding(
@@ -61,7 +72,6 @@ class _PostFormState extends State<PostForm> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

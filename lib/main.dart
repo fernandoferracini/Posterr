@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:posterr/screens/home.dart';
 import 'package:posterr/screens/splash_screen.dart';
-
 import 'dao/posterr_posts_class.dart';
 import 'dao/posterr_users_class.dart';
 
