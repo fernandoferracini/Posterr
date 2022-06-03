@@ -3,6 +3,7 @@ import 'package:posterr/dao/posterr_posts_class.dart';
 import 'package:posterr/components/circular_progress.dart';
 import 'package:posterr/components/centered_message.dart';
 import 'package:posterr/screens/post_form.dart';
+import 'package:posterr/screens/quoteRepost_form.dart';
 import 'package:posterr/screens/repost_form.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -41,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 return ListView.builder(
                       itemBuilder: (context, index) {
                         final Map<String, dynamic> post = posts![index];
-                        return buildPost(post);
+                        return buildPost(post,posts);
                       },
                       itemCount: posts?.length,
                     );
@@ -67,8 +68,14 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Card buildPost(Map<String, dynamic> post) {
+  Card buildPost(Map<String, dynamic> post, List<Map<String, dynamic>> posts) {
     if(post['repostCode'] != null){
+      int indexOriginalPost = 0;
+      posts.asMap().forEach((index, item) {
+        if(item['codPost'] == post['repostCode']){
+          indexOriginalPost = index;
+        }
+      });
       return Card(
         clipBehavior: Clip.antiAlias,
         child: Column(
@@ -77,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 leading: Icon(Icons.person_rounded),
                 title: Text('R '+post['name']),
                 subtitle: Text(
-                  'Reposted  ' + (post['repostDaysFrom'] > 1 ? (post['repostDaysFrom'].toString() + ' days ago') : post['repostHoursFrom'] < 24 ? (post['repostHoursFrom'].toString() + ' hours ago') : (post['repostMinutesFrom'].toString() + ' minutes ago')).toString(),
+                  'Reposted  ' + (post['postedDaysFrom'] >= 1 ? (post['postedDaysFrom'].toString() + ' days ago') : post['postedHoursFrom'] >= 24 ? (post['postedHoursFrom'].toString() + ' hours ago') : (post['postedMinutesFrom'].toString() + ' minutes ago')).toString(),
                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
                 )
             ),
@@ -93,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     ListTile(
                       leading: Icon(Icons.person_rounded),
-                      title: Text(post['repostname']+' . '+(post['postedDaysFrom'] > 1 ? (post['postedDaysFrom'].toString() + ' days ago') : post['postedHoursFrom'] < 24 ? (post['postedHoursFrom'].toString() + ' hours ago') : (post['postedMinutesFrom'].toString() + ' minutes ago')).toString()),
+                      title: Text(post['repostname']+' . '+(posts[indexOriginalPost]['postedDaysFrom'] >= 1 ? (posts[indexOriginalPost]['postedDaysFrom'].toString() + ' days ago') : posts[indexOriginalPost]['postedHoursFrom'] >= 24 ? (posts[indexOriginalPost]['postedHoursFrom'].toString() + ' hours ago') : (posts[indexOriginalPost]['postedMinutesFrom'].toString() + ' minutes ago')).toString()),
                       subtitle: Text(
                         post['repostUsername'],
                         style: TextStyle(color: Colors.black.withOpacity(0.6)),
@@ -120,7 +127,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   iconSize: 25,
                   color: Colors.purple,
                   onPressed: () {
-
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => RepostForm('repost','@fernandoferracini', post['repostCode']),
+                      ),
+                    ).then((value) => setState(() {}));
                   },
                 ),
                 IconButton(
@@ -130,7 +141,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   iconSize: 25,
                   color: Colors.purple,
                   onPressed: () {
-
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => QuoteRepostForm('quorepost','@fernandoferracini', post['repostCode']),
+                      ),
+                    ).then((value) => setState(() {}));
                   },
                 ),
               ],
@@ -140,6 +155,12 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }else{
       if(post['quoteRepostCode'] != null){
+        int indexOriginalPost = 0;
+        posts.asMap().forEach((index, item) {
+          if(item['codPost'] == post['quoteRepostCode']){
+            indexOriginalPost = index;
+          }
+        });
         return Card(
           clipBehavior: Clip.antiAlias,
           child: Column(
@@ -148,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   leading: Icon(Icons.person_rounded),
                   title: Text('Q '+post['name']),
                   subtitle: Text(
-                    'Reposted  ' + (post['quoteRepostDaysFrom'] > 1 ? (post['quoteRepostDaysFrom'].toString() + ' days ago') : post['quoteRepostHoursFrom'] < 24 ? (post['quoteRepostHoursFrom'].toString() + ' hours ago') : (post['quoteRepostMinutesFrom'].toString() + ' minutes ago')).toString(),
+                    'Reposted  ' + (post['postedDaysFrom'] >= 1 ? (post['postedDaysFrom'].toString() + ' days ago') : post['postedHoursFrom'] >= 24 ? (post['postedHoursFrom'].toString() + ' hours ago') : (post['postedMinutesFrom'].toString() + ' minutes ago')).toString(),
                     style: TextStyle(color: Colors.black.withOpacity(0.6)),
                   )
               ),
@@ -171,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: [
                       ListTile(
                         leading: Icon(Icons.person_rounded),
-                        title: Text(post['quoteRepostname']+' . '+(post['postedDaysFrom'] > 1 ? (post['postedDaysFrom'].toString() + ' days ago') : post['postedHoursFrom'] < 24 ? (post['postedHoursFrom'].toString() + ' hours ago') : (post['postedMinutesFrom'].toString() + ' minutes ago')).toString()),
+                        title: Text(post['quoteRepostname']+' . '+(posts[indexOriginalPost]['postedDaysFrom'] >= 1 ? (posts[indexOriginalPost]['postedDaysFrom'].toString() + ' days ago') : posts[indexOriginalPost]['postedHoursFrom'] >= 24 ? (posts[indexOriginalPost]['postedHoursFrom'].toString() + ' hours ago') : (posts[indexOriginalPost]['postedMinutesFrom'].toString() + ' minutes ago')).toString()),
                         subtitle: Text(
                           post['username'],
                           style: TextStyle(color: Colors.black.withOpacity(0.6)),
@@ -198,10 +219,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     iconSize: 25,
                     color: Colors.purple,
                     onPressed: () {
-                      // _controller.open();
-                      // setState(() {
-                      //   _button = 'Open Drawer';
-                      // });
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => RepostForm('repost','@fernandoferracini', post['quoteRepostCode']),
+                        ),
+                      ).then((value) => setState(() {}));
                     },
                   ),
                   IconButton(
@@ -211,7 +233,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     iconSize: 25,
                     color: Colors.purple,
                     onPressed: () {
-
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => QuoteRepostForm('quorepost','@fernandoferracini', post['quoteRepostCode']),
+                        ),
+                      ).then((value) => setState(() {}));
                     },
                   ),
                 ],
@@ -226,7 +252,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               ListTile(
                 leading: Icon(Icons.person_rounded),
-                title: Text('P '+post['name']+' . '+(post['postedDaysFrom'] > 1 ? (post['postedDaysFrom'].toString() + ' days ago') : post['postedHoursFrom'] < 24 ? (post['postedHoursFrom'].toString() + ' hours ago') : (post['postedMinutesFrom'].toString() + ' minutes ago')).toString()),
+                title: Text('P '+post['name']+' . '+(post['postedDaysFrom'] >= 1 ? (post['postedDaysFrom'].toString() + ' days ago') : post['postedHoursFrom'] >= 24 ? (post['postedHoursFrom'].toString() + ' hours ago') : (post['postedMinutesFrom'].toString() + ' minutes ago')).toString()),
                 subtitle: Text(
                   post['username'],
                   style: TextStyle(color: Colors.black.withOpacity(0.6)),
@@ -263,7 +289,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     iconSize: 25,
                     color: Colors.purple,
                     onPressed: () {
-
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => QuoteRepostForm('quorepost','@fernandoferracini', post['codPost']),
+                        ),
+                      ).then((value) => setState(() {}));
                     },
                   ),
                 ],
