@@ -23,10 +23,21 @@ class _SplashState extends State<Splash> {
 
     return Container(
         color: Colors.purple,
-        child: CenteredMessage(
-          'Posterr - Social Network',
-          icon: Icons.people_outline_rounded,
-        ),
-);
+        child: Align(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(Icons.person_rounded, color: Colors.white, size: 70.0),
+              Text('Posterr',style: TextStyle(color: Colors.white,
+                fontSize: 20.0,
+                decoration: TextDecoration.none,)),
+              Text('Social Network',style: TextStyle(color: Colors.white, fontSize: 15.0,
+                decoration: TextDecoration.none,)),
+            ],
+          ),
+          ),
+        );
   }
 }

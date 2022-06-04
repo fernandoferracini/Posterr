@@ -1,63 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:posterr/components/globals.dart' as globals;
 import 'package:posterr/dao/posterr_posts_class.dart';
-import 'package:posterr/components/circular_progress.dart';
-import 'package:posterr/components/centered_message.dart';
+import 'package:posterr/components/posterr_general.dart';
 import 'package:posterr/screens/post_form_screen.dart';
 import 'package:posterr/screens/quoteRepost_form_screen.dart';
 import 'package:posterr/screens/repost_form_screen.dart';
-import 'package:posterr/screens/user_screen.dart';
+import 'package:posterr/components/centered_message.dart';
+import 'package:posterr/components/circular_progress.dart';
+import 'package:posterr/screens/select_user_screen.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class User extends StatefulWidget {
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _UserState createState() => _UserState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _UserState extends State<User> {
+  final TextEditingController _valueController = TextEditingController();
+  String _enteredText = '';
   final posterrPosts objposterrPosts = posterrPosts();
-
-  @override
+      @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('User Profile'),
         actions: <Widget>[
-          Padding(
-              padding: EdgeInsets.only(top: 16.0),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => User(),
-                    ),
-                  ).then((value) => setState(() {}));
-                },
-                child: Text(globals.loggedUser,
-                  style: TextStyle(fontSize: 20.0),),
-              )
-          ),
           Padding(
               padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => User(),
-                      ));
+                    MaterialPageRoute(
+                      builder: (context) => SelectUser(),
+                    ),
+                  ).then((value) => setState(() {}));
                 },
                 child: Icon(
-                    Icons.person
+                    Icons.person_search
                 ),
               )
           ),
         ],
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: objposterrPosts.getAllPosts(),
+      body:FutureBuilder<List<Map<String, dynamic>>>(
+        future: objposterrPosts.getPostsUsername(globals.loggedUser),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -70,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
             case ConnectionState.done:
               if (snapshot.hasData) {
                 final List<Map<String, dynamic>>? posts = snapshot.data;
+                // PosterrGeneral.printLongText(posts.toString());
                 posts?.forEach((item) {
                   if(item['username'] == globals.loggedUser){
                     // print('user: '+item['username'].toString()+ 'posts: '+item['postsToday'].toString());
@@ -80,14 +68,24 @@ class _MyHomePageState extends State<MyHomePage> {
                     }
                   }
                 });
-                // PosterrGeneral.printLongText(posts.toString());
-                return ListView.builder(
-                      itemBuilder: (context, index) {
-                        final Map<String, dynamic> post = posts![index];
-                        return buildPost(post,posts);
-                      },
-                      itemCount: posts?.length,
-                    );
+                return Column(
+                  children: <Widget>[
+                    Container(
+                      child: buildSingleChildScrollView(context, posts),
+                    ),
+                    Expanded(
+                      child: Container(
+                        child: ListView.builder(
+                          itemBuilder: (context, index) {
+                            final Map<String, dynamic> post = posts![index];
+                            return buildPost(post,posts);
+                          },
+                          itemCount: posts?.length,
+                        ),
+                      ),
+                    )
+                  ],
+                );
               }
               break;
           }
@@ -126,9 +124,105 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ).then((value) => setState(() {}));
           }
+
         },
       ),
     );
+  }
+
+  SingleChildScrollView buildSingleChildScrollView(BuildContext context, posts) {
+      // final posterrPosts objposterrPosts = posterrPosts();
+      // objposterrPosts.getPostsData(globals.loggedUser);
+      // print(PostsData.toString())
+    final DateFormat formatter = DateFormat('MMMM d, y');
+    DateTime dt = DateTime.parse(posts[0]['joinedDate']);
+    String joinedDate = formatter.format(dt);
+      return SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Card(
+              clipBehavior: Clip.antiAlias,
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.person_rounded, color: Colors.purple, size: 70.0),
+                      title: Text(posts[0]['name'].toString(),style: TextStyle(color: Colors.purple, fontSize: 28.0)),
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  globals.loggedUser,
+                                  style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 20.0),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'Date joined Posterr: '+joinedDate,
+                              style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    ButtonBar(
+                      alignment: MainAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.post_add,
+                          ),
+                          iconSize: 25,
+                          color: Colors.purple,
+                          onPressed: () {
+                          },
+                        ),
+                        Text(
+                          posts[0]['countPost'].toString(),
+                          style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 18.0),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.autorenew_rounded,
+                          ),
+                          iconSize: 25,
+                          color: Colors.purple,
+                          onPressed: () {
+                          },
+                        ),
+                        Text(
+                          posts[0]['countRepost'].toString(),
+                          style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 18.0),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.create_rounded,
+                          ),
+                          iconSize: 25,
+                          color: Colors.purple,
+                          onPressed: () {
+                          },
+                        ),
+                        Text(
+                          posts[0]['countQuoteRepost'].toString(),
+                          style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 18.0),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
   }
 
   Card buildPost(Map<String, dynamic> post, List<Map<String, dynamic>> posts) {
@@ -216,6 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ).then((value) => setState(() {}));
                     }
+
                   },
                 ),
                 IconButton(
@@ -251,6 +346,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ).then((value) => setState(() {}));
                     }
+
                   },
                 ),
               ],
@@ -450,6 +546,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ).then((value) => setState(() {}));
                       }
+
                     },
                   ),
                   IconButton(
@@ -498,8 +595,3 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 }
-
-
-
-
-
