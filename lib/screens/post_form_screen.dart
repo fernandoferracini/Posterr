@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:posterr/dao/posterr_posts_class.dart';
 import 'package:posterr/components/posterr_general.dart';
+import 'package:posterr/components/globals.dart' as globals;
 
 class PostForm extends StatefulWidget {
 
@@ -45,11 +48,20 @@ class _PostFormState extends State<PostForm> {
                   controller: _valueController,
                   maxLines: 5,
                   maxLength: 777,
+                  buildCounter: (
+                      context, { required currentLength, required isFocused, maxLength }) {
+                    int utf8Length = utf8.encode(_valueController.text).length;
+                    return Container(
+                      child: Text(
+                        '$utf8Length/$maxLength',
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    );
+                  },
                   style: TextStyle(fontSize: 24.0),
                   decoration: InputDecoration(
                       labelText: 'Type your message...',
-                      border: OutlineInputBorder(),
-                      counterText: '${(777 - _enteredText.length).toString()} character(s) left.'),
+                      border: OutlineInputBorder()),
                 ),
               ),
               Padding(
@@ -60,7 +72,7 @@ class _PostFormState extends State<PostForm> {
                     child: Text('Post!'),
                     onPressed: () {
                       final String value = _valueController.text;
-                      objposterrPosts.post(value).then((transaction) {
+                      objposterrPosts.post(globals.loggedUser, value).then((transaction) {
                         if (transaction != null) {
                           Navigator.pop(context);
                         }
