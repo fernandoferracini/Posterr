@@ -34,20 +34,18 @@ Posterr only has two screens, the home (default), and the user profile screen.
 
 ##Critique
 
-Caso houvesse mais tempo, para que o app pudesse competir em igualdade com os aplicativos de merdado, deveriam ser implementadas as seguintes novas funcionalidades:
+If there was more time, so that the app could compete on an equal footing with the most important current apps, the following new features should be implemented:
 
 ###User profile and Authentication:
 - Sign on, sign in , user profile data and password maintanance.
 - Language options
 
-###Posts: 
-- função de deletar
-- função de editar(to be discussed).
-- Possibilidade de inserir media(imagen, vídeos).
-- Possibilidade de compartilhar links.
+###Posts:
+- delete function
+- edit(to be discussed) function.
+- Possibility to insert media(image, videos).
+- Possibility to share links.
 
-###Feed: 
-- Possibilidade de configuração de exibição de timeline(cronológica, conteúdo relevante, etc)
-- Possibilidade de "seguir" outros usuários para acompanhar de perto o sonteúdo distribuído por eles.
-
-
+###Feed:
+- Possibility of timeline display configuration (chronological, relevant content, etc)
+- Possibility to "follow" other users to closely follow the content distributed by them.
