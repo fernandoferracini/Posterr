@@ -13,7 +13,7 @@ This project is related to a Strider Mobile assessment
 Posterr is a new social media application. Posterr is very similar to Twitter, but it has far fewer features.
 Posterr only has two screens, the home (default), and the user profile screen.
 
-## The functions implemented so far are:
+## The features implemented so far are:
 
 ### Home Screen:
 - On the Home screen we have a feed with all posts from all users displayed in descending order of posting date (from newest to oldest).
