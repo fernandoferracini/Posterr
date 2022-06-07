@@ -40,12 +40,12 @@ If there was more time, so that the app could compete on an equal footing with t
 - Sign on, sign in , user profile data and password maintanance.
 - Language options
 
-###Posts:
+### Posts:
 - delete function
 - edit(to be discussed) function.
 - Possibility to insert media(image, videos).
 - Possibility to share links.
 
-###Feed:
+### Feed:
 - Possibility of timeline display configuration (chronological, relevant content, etc)
 - Possibility to "follow" other users to closely follow the content distributed by them.
