@@ -32,4 +32,22 @@ Posterr only has two screens, the home (default), and the user profile screen.
 - When writing a post, a user should see how many characters she/he has left
 - Users cannot update or delete their posts.
 
+##Critique
+
+Caso houvesse mais tempo, para que o app pudesse competir em igualdade com os aplicativos de merdado, deveriam ser implementadas as seguintes novas funcionalidades:
+
+###User profile and Authentication:
+- Sign on, sign in , user profile data and password maintanance.
+- Language options
+
+###Posts: 
+- função de deletar
+- função de editar(to be discussed).
+- Possibilidade de inserir media(imagen, vídeos).
+- Possibilidade de compartilhar links.
+
+###Feed: 
+- Possibilidade de configuração de exibição de timeline(cronológica, conteúdo relevante, etc)
+- Possibilidade de "seguir" outros usuários para acompanhar de perto o sonteúdo distribuído por eles.
+
 
