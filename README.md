@@ -32,7 +32,7 @@ Posterr only has two screens, the home (default), and the user profile screen.
 - When writing a post, a user should see how many characters she/he has left
 - Users cannot update or delete their posts.
 
-##Critique
+## Critique
 
 If there was more time, so that the app could compete on an equal footing with the most important current apps, the following new features should be implemented:
 
