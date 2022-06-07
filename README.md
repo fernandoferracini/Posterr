@@ -61,11 +61,11 @@ If there was more time, so that the app could compete on an equal footing with t
 - The BackEnd should be thought of considering even users with slow internet connections.
 - The BackEnd must be implemented using RESTful API's built within the most modern standards on the market.
 
-##### Security and privacy issues
+#### Security and privacy issues
 - The App must treat privacy as a topic of utmost importance and taking into account the GDPR of each country in which we operate.
 - FrontEnd and BackEnd must be built considering the most current data security and intrusion standards determined by the "OWASP top ten"
 
-##### Assuming you've got multiple crashes for specific models
+#### Assuming you've got multiple crashes for specific models
 - The design of the App must take into account different models and usage scenarios. Based on these scenarios, versions and/or tools must be built in order to test these scenarios and models under stress.
 This type of treatment helps to avoid and, in case of an occurrence, better track what happens.
 - The development team must be able and agile to track, isolate and create containment measures for certain scenarios.
