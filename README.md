@@ -1,16 +1,16 @@
 # posterr
 
-A new Flutter project.
+Strider Mobile assessment - 2.0
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is related to a Strider Mobile assessment
 
-A few resources to get you started if this is your first Flutter project:
+- Author: Fernando Bela Ferracini
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Overview
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Posterr is a new social media application. Posterr is very similar to Twitter, but it has far fewer features.
+Posterr only has two screens, the home (default), and the user profile screen.
+
+
